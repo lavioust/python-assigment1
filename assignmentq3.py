@@ -1,4 +1,4 @@
-dna=raw_input("put dna sequence:")
+dna=raw_input("put dna sequence :")
 dna=dna.upper()
 counter=0
 number=0
