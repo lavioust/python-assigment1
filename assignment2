@@ -1,0 +1,221 @@
+def read_fasta_file(fastafile):
+    f=open(fastafile,"r")
+    f.seek(0,0)
+    x=f.readlines()
+    t=" "
+    for line in f:
+        t=t+line
+    return (x[0],t)
+
+
+def reverse_complement(sequence):
+    sequence=sequence.upper()
+    complement=" "
+    
+    for i in range(len(sequence)):
+        if sequence[i]=="A":
+            complement=complement+"T"
+        elif sequence[i]=="T":
+            complement=complement+"A"
+        elif sequence[i]=="G":
+            complement=complement+"C"
+        else:
+            complement=complement+"G"
+    return complement[::-1]
+
+def get_ORF(sequence):
+    for i in range(0,len(sequence),3):
+        codon=sequence[i:i+3]
+        a=-1
+        b=-1
+        c=-1
+        d=-1
+        if codon=="ATG":
+            a=sequence.find(codon)
+        if codon=="TGA":
+            b=sequence.find(codon)
+        if codon=="TAA":
+            c=sequence.find(codon)
+        if codon=="TAG":
+            d=sequence.find(codon)
+        if a!=-1 and b!=-1 or c!=-1 or d!=-1:
+            if a<b or a<c or a<d:
+                return 0
+            else:
+                for i in range(1,len(sequence),3):
+                    codon=sequence[i:i+3]
+                    a=-1
+                    b=-1
+                    c=-1
+                    d=-1
+                    if codon=="ATG":
+                        a=sequence.find(codon)
+                    if codon=="TGA":
+                        b=sequence.find(codon)
+                    if codon=="TAA":
+                        c=sequence.find(codon)
+                    if codon=="TAG":
+                        d=sequence.find(codon)
+                    if a!=-1 and b!=-1 or c!=-1 or d!=-1:
+                        if a<b or a<c or a<d:
+                            return 1
+                        else:
+                            for i in range(2,len(sequence),3):
+                                codon=sequence[i:i+3]
+                                a=-1
+                                b=-1
+                                c=-1
+                                d=-1                                
+                                if codon=="ATG":
+                                    a=sequence.find(codon)
+                                if codon=="TGA":
+                                    b=sequence.find(codon)
+                                if codon=="TAA":
+                                    c=sequence.find(codon)
+                                if codon=="TAG":
+                                    d=sequence.find(codon)
+                                if a!=-1 and b!=-1 or c!=-1 or d!=-1:
+                                    if a<b or a<c or a<d:
+                                        return 2
+                else:
+                    return -1
+        if a==-1 and b!=-1 or c!=-1 or d!=-1:
+            for i in range(1,len(sequence),3):
+                codon=sequence[i:i+3]
+                a=-1
+                b=-1
+                c=-1
+                d=-1
+                if codon=="ATG":
+                    a=sequence.find(codon)
+                if codon=="TGA":
+                    b=sequence.find(codon)
+                if codon=="TAA":
+                    c=sequence.find(codon)
+                if codon=="TAG":
+                    d=sequence.find(codon)
+                if a!=-1 and b!=-1 or c!=-1 or d!=-1:
+                    if a<b or a<c or a<d:
+                        return 1 
+                    else:
+                        for i in range(2,len(sequence),3):
+                            codon=sequence[i:i+3]
+                            a=-1
+                            b=-1
+                            c=-1
+                            d=-1
+                            if codon=="ATG":
+                                a=sequence.find(codon)
+                            if codon=="TGA":
+                                b=sequence.find(codon)
+                            if codon=="TAA":
+                                c=sequence.find(codon)
+                            if codon=="TAG":
+                                d=sequence.find(codon)
+                            if a!=-1 and b!=-1 or c!=-1 or d!=-1:
+                                if a<b or a<c or a<d:
+                                    return 2
+                else:
+                    return -1
+        if a!=-1 and b==-1 and c==-1 and d==-1:
+            for i in range(1,len(sequence),3):
+                codon=sequence[i:i+3]
+                a=-1
+                b=-1
+                c=-1
+                d=-1
+                if codon=="ATG":
+                    a=sequence.find(codon)
+                if codon=="TGA":
+                    b=sequence.find(codon)
+                if codon=="TAA":
+                    c=sequence.find(codon)
+                if codon=="TAG":
+                    d=sequence.find(codon)
+                if a!=-1 and b!=-1 or c!=-1 or d!=-1:
+                    if a<b or a<c or a<d:
+                        return 1
+                    else:
+                        for i in range(2,len(sequence),3):
+                            codon=sequence[i:i+3]
+                            a=-1
+                            b=-1
+                            c=-1
+                            d=-1
+                            if codon=="ATG":
+                                a=sequence.find(codon)
+                            if codon=="TGA":
+                                b=sequence.find(codon)
+                            if codon=="TAA":
+                                c=sequence.find(codon)
+                            if codon=="TAG":
+                                d=sequence.find(codon)
+                            if a!=-1 and b!=-1 or c!=-1 or d!=-1:
+                                if a<b or a<c or a<d:
+                                    return 2                                
+                else:
+                    return -1
+
+def get_gene_by_ORF(seq,j):
+    a=seq[j:].find("ATG")
+    b=seq[j:].rfind("TGA")
+    c=seq[j:].rfind("TAA")
+    d=seq[j:].rfind("TAG")
+    sequence1=" "
+    sequence2=" "
+    sequence3=" "
+     
+    largest=len(sequence1)
+    if a!=-1 and b!=-1:
+        if a<b:
+            for i in range (a+1,b+4):
+                sequence1=sequence1+seq[i]
+    if a!=-1 and c!=-1:
+        if a<c:
+            for i in range(a+1,c+4):
+                sequence2=sequence2+seq[i]
+    if a!=-1 and d!=-1:
+        if a<d:
+            for i in range(a+1,d+4):
+                sequence3=sequence3+seq[i]
+    if len(sequence2)>largest:
+        largest=len(sequence2)
+    if len(sequence3)>largest:
+        largest=len(sequence3)
+     
+    if largest==len(sequence1):
+        return sequence1 
+    elif largest==len(sequence2):
+        return sequence2 
+    else:
+        return sequence3
+
+def translate(dna):
+    code={"ATC":"I","ATA":"I","ATT":"I","CTC":"L","CTA":"L","CTG":"L","TTA":"L","CTT":"L","GTC":"V","GTA":"V","GTG":"V","GTT":"V","TTC":"F","TTT":"F","ATG":"M","TGC":"C","TGT":"C","GCC":"A","GCA":"A","GCG":"A","GCT":"A","GGC":"G","GGA":"G","GGG":"G","GGT":"G","CCC":"P","CCA":"P","CCG":"P","CCT":"P","ACC":"T","ACA":"T","ACG":"T","ACT":"T","TCC":"S","TCA":"S","TCG":"S","AGT":"S","AGC":"S","TCT":"S","TAC":"Y","TAT":"Y","TGG":"W","CAG":"Q","CAA":"Q","AAC":"N","AAT":"N","CAC":"H","CAT":"H","GAG":"E","GAA":"E","GAC":"D","GAT":"D","AAG":"K","AAA":"K","TTG":"L","CGT":"R","CGC":"R","CGA":"R","CGG":"R","AGA":"R","AGG":"R","TAG":"stop","TAA":"stop","TGA":"stop"}
+    protein=""
+    dna=dna.upper()
+    for i in range(0,len(dna),3):
+        codon=dna[i:i+3]
+        
+        if codon=="TTG" or codon=="TGA" or codon=="TAG":
+            break
+        protein=protein+code[codon]
+    return protein
+
+def get_fasta(sequence,identity):
+    identity=">"+identity
+    lines=" "
+    for i in range(len(sequence)):
+        if i%60!=0:
+            lines=lines+sequence[i]
+        else:
+            lines=lines+"\n"+sequence[i]
+    print identity
+    return lines
+
+
+
+
+
+
+
