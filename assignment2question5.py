@@ -9,3 +9,4 @@ def translate(dna):
             break
         protein=protein+code[codon]
     return protein
+
